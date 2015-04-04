@@ -1,10 +1,21 @@
 # denoiseR
 Regularized low rank matrix estimation
 
-To install the package
+To install and load the package
 
-library(devtools) 
+ ```R
+-install.packages("devtools")
+ library(devtools) 
+ install_github("julierennes/denoiseR")
+ library(denoiseR)
+ ```
+ 
 
-install_github("julierennes/denoiseR")
+ 
 
-library(denoiseR)
+
+
+
+
+
+
