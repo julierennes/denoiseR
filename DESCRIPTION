@@ -1,0 +1,12 @@
+Package: denoiseR
+Version: 1.0
+Date: 2015-02-09
+Type: Package
+Title: Regularized low-rank matrix estimation
+Author: Julie Josse, Stefan Wager, Matan Gavish, Sylvain Sardy 
+Maintainer: Julie Josse <josse@agrocampus-ouest.fr>
+Imports:
+        irlba, Matrix, FactoMineR, stats
+Suggests: missMDA
+Description: Estimate a low rank matrix from noisy data using singular values thresholding and shrinking functions. 
+License: GPL (>=2)
