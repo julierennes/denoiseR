@@ -18,21 +18,16 @@
 
 
 LRsim <- function(n, p, k, SNR){
-
- noisesd <- 1/(SNR*sqrt(n*p)) 
- if(k == 0){
-  MU <- matrix(0, n, p)  
- } else {
-  SIGNAL <- replicate(p, rnorm(n, 0, 1))
-  SIGNAL <- scale(SIGNAL, scale = FALSE)
-  svdSIGNAL <- svd(SIGNAL) 
-  MU <- svdSIGNAL$u[, 1:k,drop=F] %*% diag(svdSIGNAL$d[1:k], k, k) %*% t(svdSIGNAL$v[, 1:k, drop=F]) / sqrt(sum(svdSIGNAL$d[1:k]^2))
- }
- X <- MU + noisesd*replicate(p, rnorm(n, 0, 1))
- return(list(X = X, mu = MU, sigma = noisesd))
+  
+  noisesd <- 1/(SNR*sqrt(n*p)) 
+  if(k == 0){
+    MU <- matrix(0, n, p)  
+  } else {
+    SIGNAL <- replicate(p, rnorm(n, 0, 1))
+    SIGNAL <- scale(SIGNAL, scale = FALSE)
+    svdSIGNAL <- svd(SIGNAL) 
+    MU <- svdSIGNAL$u[, 1:k,drop=F] %*% diag(svdSIGNAL$d[1:k], k, k) %*% t(svdSIGNAL$v[, 1:k, drop=F]) / sqrt(sum(svdSIGNAL$d[1:k]^2))
+  }
+  X <- MU + noisesd*replicate(p, rnorm(n, 0, 1))
+  return(list(X = X, mu = MU, sigma = noisesd))
 }
-
-
-  
-  
-  
