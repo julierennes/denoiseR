@@ -57,11 +57,11 @@ optishrink <- function(X,
   
   loss <- match.arg(loss, c("Frobenius", "Operator", "Nuclear", "frobenius", "operator", "nuclear", "Frob", "Op", "Nuc", "frob", "op", "nuc"), several.ok = T)[1]
   loss <- tolower(loss)
-
-   if(center == "TRUE"){
-      moy <- apply(X, 2, mean)
-      X <- scale(X, scale = F)
-   }
+  
+  if(center == "TRUE"){
+    moy <- apply(X, 2, mean)
+    X <- scale(X, scale = F)
+  }
   
   # infer unspecified choices
   
@@ -72,8 +72,8 @@ optishrink <- function(X,
   }  
   
   if(method == "ln" & is.na(sigma)){   
-   sigma <- estim_sigma(X, method = "LN", center = center, k = k) 
-   warning(paste("sigma estimated by LN:", round(sigma,6)))   
+    sigma <- estim_sigma(X, method = "LN", center = center, k = k) 
+    warning(paste("sigma estimated by LN:", round(sigma,6)))   
   }
   
   if(method == "asympt" & is.na(sigma)){   
@@ -81,7 +81,7 @@ optishrink <- function(X,
     warning(paste("sigma estimated by MAD:", round(sigma,6)))  
   }
   
- 
+  
   #
   # Solve the Optimal Shrinker
   #
@@ -95,60 +95,60 @@ optishrink <- function(X,
   } else {
     N <- n
   }
- 
- if(method == "ln"){
-   
-   if(k == 0){
-    lambda.shrink <- 0
-    X.shrinkopt <- matrix(0, n, p)
-   } else {
-    lambda.shrink <- (svdX$d[1:k]^2 - n*(p/min(p,N))*sigma^2)/svdX$d[1:k]
-    X.shrinkopt <- (svdX$u[, 1:k, drop = F] %*% diag(lambda.shrink, k, k)%*%t(svdX$v[, 1:k, drop = F]))
-   }
-    nb.eigen <- k
- 
-  } else {
-                 
- beta <-  min(n, p)/max(n, p)
- svdXajust <- svd(X/(sqrt(max(n, p))*sigma) )
- ind <- which((svdXajust$d - (1+sqrt(beta)) >= 0))
- if (length(ind) == 0){
-  X.shrinkopt <- matrix(0, n, p)
-  nb.eigen <- 0
- } else {   
+  
+  if(method == "ln"){
     
-  if(loss == "frobenius") {
-   lambda.shrink <- ((1/(svdXajust$d[1:length(ind)])) * sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)^2  - 4*beta)) 
-  } else {     
-   lambda.shrink <- 1/(sqrt(2)) * sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)  + sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)^2 - 4*beta))
-  } 
-  
-  X.shrinkopt <- (sqrt(max(n, p))*sigma) *(svdXajust$u[, 1:length(ind), drop = F]%*%diag(lambda.shrink, length(ind), length(ind))%*%t(svdXajust$v[, 1:length(ind), drop = F]))
-  nb.eigen  <- length(ind) 
-  
-  if (loss == "nuclear") {   
-   ind <-  which((lambda.shrink^4 - beta - sqrt(beta)*lambda.shrink*svdXajust$d[1:length(ind)]) >= 0)
-   if (length(ind) == 0){
-    X.shrinkopt <- matrix(0, n, p)
-    nb.eigen <- 0
-   } else {
-    lambda.shrink <- 1/(svdXajust$d[1:length(ind)]*lambda.shrink^2)*(svdXajust$d[1:length(ind)]^4 - beta - sqrt(beta)*lambda.shrink*svdXajust$d[1:length(ind)])
-    X.shrinkopt <- (sqrt(max(n, p))*sigma)*(svdXajust$u[, 1:length(ind), drop=F]%*% diag(lambda.shrink, length(ind), length(ind))%*%t(svdXajust$v[, 1:length(ind), drop=F]))
-    nb.eigen <- length(ind)      
+    if(k == 0){
+      lambda.shrink <- 0
+      X.shrinkopt <- matrix(0, n, p)
+    } else {
+      lambda.shrink <- (svdX$d[1:k]^2 - n*(p/min(p,N))*sigma^2)/svdX$d[1:k]
+      X.shrinkopt <- (svdX$u[, 1:k, drop = F] %*% diag(lambda.shrink, k, k)%*%t(svdX$v[, 1:k, drop = F]))
+    }
+    nb.eigen <- k
+    
+  } else {
+    
+    beta <-  min(n, p)/max(n, p)
+    svdXajust <- svd(X/(sqrt(max(n, p))*sigma) )
+    ind <- which((svdXajust$d - (1+sqrt(beta)) >= 0))
+    if (length(ind) == 0){
+      X.shrinkopt <- matrix(0, n, p)
+      nb.eigen <- 0
+    } else {   
+      
+      if(loss == "frobenius") {
+        lambda.shrink <- ((1/(svdXajust$d[1:length(ind)])) * sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)^2  - 4*beta)) 
+      } else {     
+        lambda.shrink <- 1/(sqrt(2)) * sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)  + sqrt((svdXajust$d[1:length(ind)]^2 - beta -1)^2 - 4*beta))
+      } 
+      
+      X.shrinkopt <- (sqrt(max(n, p))*sigma) *(svdXajust$u[, 1:length(ind), drop = F]%*%diag(lambda.shrink, length(ind), length(ind))%*%t(svdXajust$v[, 1:length(ind), drop = F]))
+      nb.eigen  <- length(ind) 
+      
+      if (loss == "nuclear") {   
+        ind <-  which((lambda.shrink^4 - beta - sqrt(beta)*lambda.shrink*svdXajust$d[1:length(ind)]) >= 0)
+        if (length(ind) == 0){
+          X.shrinkopt <- matrix(0, n, p)
+          nb.eigen <- 0
+        } else {
+          lambda.shrink <- 1/(svdXajust$d[1:length(ind)]*lambda.shrink^2)*(svdXajust$d[1:length(ind)]^4 - beta - sqrt(beta)*lambda.shrink*svdXajust$d[1:length(ind)])
+          X.shrinkopt <- (sqrt(max(n, p))*sigma)*(svdXajust$u[, 1:length(ind), drop=F]%*% diag(lambda.shrink, length(ind), length(ind))%*%t(svdXajust$v[, 1:length(ind), drop=F]))
+          nb.eigen <- length(ind)      
+        }
+      } 
+    }
   }
-  } 
- }
- }
-
+  
   if(center == "TRUE"){ 
-  X.shrinkopt <-  X.shrinkopt + matrix(moy, nrow(X), ncol(X), byrow = T)
+    X.shrinkopt <-  X.shrinkopt + matrix(moy, nrow(X), ncol(X), byrow = T)
   }
-
+  
   row.names(X.shrinkopt) <- row.names(X)
   colnames(X.shrinkopt) <- colnames(X)
-
-return(list(mu.hat = X.shrinkopt,
-            nb.eigen = nb.eigen,
-            singval = lambda.shrink,
-            low.rank = svd(X.shrinkopt)))
+  
+  return(list(mu.hat = X.shrinkopt,
+              nb.eigen = nb.eigen,
+              singval = lambda.shrink,
+              low.rank = svd(X.shrinkopt)))
 }

@@ -39,45 +39,45 @@ estim_sigma <- function(X,
     stop("all the variables must be numeric")
   }
   
-if(center == "TRUE"){
-  X <- scale(X,scale=F)
- }
-
- n = nrow(X) 
- p = ncol(X)
- svdX = svd(X)
-
-# infer unspecified choices
-if(method == "ln" & is.na(k)){
-  warning("Since you did not specify k, k was estimated using the FactoMineR estim_ncp function")
-  k <- estim_ncp(X, scale = F)$ncp
-  print(paste("k = ", k))    
- } 
-
- if(center == "TRUE") {
- N <- (n-1)
- } else {
-   N <- n
- }
-
-if((k >= min(N, p))&(method == "ln")){   
-stop("the number k specified has to be smaller than the minimum of the number of rows or columns")
-}
-
-# Begin
- if (method == "ln"){
- 
- if(k == 0){
-   sigma = sqrt(sum(svdX$d^2)/(N*p))
+  if(center == "TRUE"){
+    X <- scale(X,scale=F)
+  }
+  
+  n = nrow(X) 
+  p = ncol(X)
+  svdX = svd(X)
+  
+  # infer unspecified choices
+  if(method == "ln" & is.na(k)){
+    warning("Since you did not specify k, k was estimated using the FactoMineR estim_ncp function")
+    k <- estim_ncp(X, scale = F)$ncp
+    print(paste("k = ", k))    
+  } 
+  
+  if(center == "TRUE") {
+    N <- (n-1)
+  } else {
+    N <- n
+  }
+  
+  if((k >= min(N, p))&(method == "ln")){   
+    stop("the number k specified has to be smaller than the minimum of the number of rows or columns")
+  }
+  
+  # Begin
+  if (method == "ln"){
+    
+    if(k == 0){
+      sigma = sqrt(sum(svdX$d^2)/(N*p))
     } else {                          
-   sigma <- sqrt(sum(svdX$d[-c(1:k)]^2)/(N*p  - N*k - p*k + k^2))
+      sigma <- sqrt(sum(svdX$d[-c(1:k)]^2)/(N*p  - N*k - p*k + k^2))
     }
- } else {
-        beta <- min(n,p)/max(n,p)
-        lambdastar <- sqrt( 2*(beta + 1) + 8*beta/((beta + 1 + (sqrt(beta^2 + 14*beta + 1)))))
-        wbstar <- 0.56*beta^3 - 0.95*beta^2 + 1.82*beta + 1.43
-        sigma <-  median(svdX$d)/(sqrt(max(n,p)) *(lambdastar/wbstar))
- }
-
-return(sigma)
+  } else {
+    beta <- min(n,p)/max(n,p)
+    lambdastar <- sqrt( 2*(beta + 1) + 8*beta/((beta + 1 + (sqrt(beta^2 + 14*beta + 1)))))
+    wbstar <- 0.56*beta^3 - 0.95*beta^2 + 1.82*beta + 1.43
+    sigma <-  median(svdX$d)/(sqrt(max(n,p)) *(lambdastar/wbstar))
+  }
+  
+  return(sigma)
 }
