@@ -56,19 +56,19 @@
 #' isa.gauss$nb.eigen
 #' 
 #'  
-#' #isa.bin <- ISA(X, delta = 0.7, noise = "Binomial")
+#' # isa.bin <- ISA(X, delta = 0.7, noise = "Binomial")
 #' 
 #' # A regularized Correspondence Analysis 
-#'  library(FactoMineR)
-#'  perfume <-  read.table("http://factominer.free.fr/docs/perfume.txt",header=TRUE,sep="\t",row.names=1)
-#'  rownames(perfume)[4] <- "Cinema"
-#'  isa.ca <- ISA(perfume, delta = 0.5, noise = "Binomial", transformation = "CA")
-#'  rownames(isa.ca$mu.hat) <- rownames(perfume)
-#'  colnames(isa.ca$mu.hat) <- colnames(perfume)
-#'  res.isa.ca <- CA(isa.ca$mu.hat, graph = FALSE)
-#'  plot(res.isa.ca, title = "Regularized CA", cex = 0.6, selectCol = "contrib 20")
-#'  res.ca <- CA(perfume, graph = FALSE)
-#'  plot(res.ca, title = "CA", cex = 0.6, selectCol = "contrib 20")
+#' # library(FactoMineR)
+#' # perfume <-  read.table("http://factominer.free.fr/docs/perfume.txt",header=TRUE,sep="\t",row.names=1)
+#' # rownames(perfume)[4] <- "Cinema"
+#' #  isa.ca <- ISA(perfume, delta = 0.5, noise = "Binomial", transformation = "CA")
+#' #  rownames(isa.ca$mu.hat) <- rownames(perfume)
+#' # colnames(isa.ca$mu.hat) <- colnames(perfume)
+#'  # res.isa.ca <- CA(isa.ca$mu.hat, graph = FALSE)
+#'  #plot(res.isa.ca, title = "Regularized CA", cex = 0.6, selectCol = "contrib 20")
+#'  #res.ca <- CA(perfume, graph = FALSE)
+#'  #plot(res.ca, title = "CA", cex = 0.6, selectCol = "contrib 20")
 
 
 ## ISA 
