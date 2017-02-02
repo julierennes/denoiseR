@@ -9,6 +9,8 @@ To install and load the package
  library(denoiseR)
  ```
  
+ The package denoiseR is now available on CRAN. Update of tha packages can be found there.
+ 
 
  
 
